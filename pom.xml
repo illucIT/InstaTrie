@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.illucit</groupId>
+		<artifactId>illucit-parent</artifactId>
+		<version>2</version>
+	</parent>
+
+	<artifactId>InstaTrie</artifactId>
+	<version>1.5</version>
+	<packaging>jar</packaging>
+
+	<name>InstaTrie</name>
+	<description>Trie Data Structure for performant String search and filtering</description>
+	<url>http://www.illucit.com</url>
+
+	<organization>
+		<name>illucIT Software GmbH</name>
+		<url>http://www.illucit.com</url>
+	</organization>
+
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<scm>
+		<connection>scm:git:${scm.connection}</connection>
+		<developerConnection>scm:git:${scm.connection}</developerConnection>
+		<url>${scm.url}</url>
+	</scm>
+
+	<developers>
+		<developer>
+			<id>csimon</id>
+			<name>Christian Simon</name>
+			<email>simon@illucit.com</email>
+			<url>https://github.com/metaxmx</url>
+		</developer>
+	</developers>
+
+	<properties>
+		<!-- Release Info -->
+		<scm.connection>git@github.com:illucIT/InstaTrie.git</scm.connection>
+		<scm.url>https://github.com/illucIT/InstaTrie</scm.url>
+
+		<!-- Target Java Compatibility -->
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
+
+		<!-- Define the version of lucene utils -->
+		<version.luceneutils>1.0</version.luceneutils>
+
+		<!-- Junit -->
+		<version.junit>4.11</version.junit>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.illucit</groupId>
+			<artifactId>lucene-utils</artifactId>
+			<version>${version.luceneutils}</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${version.junit}</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<finalName>${project.artifactId}</finalName>
+		<plugins>
+			<plugin>
+				<artifactId>maven-source-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<artifactId>maven-javadoc-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+	<repositories>
+		<!-- illucIT Public Repository -->
+		<repository>
+			<id>illucit</id>
+			<name>illucIT Company Maven Repository</name>
+			<url>http://repository.illucit.com</url>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+				<checksumPolicy>warn</checksumPolicy>
+			</releases>
+		</repository>
+	</repositories>
+
+</project>
