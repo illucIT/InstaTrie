@@ -1,6 +1,6 @@
 package com.illucit.instatrie;
 
-import static com.illucit.instatrie.util.CollectionUtils.newList;
+import static com.illucit.instatrie.util.ListUtils.newList;
 import static java.util.function.Function.identity;
 
 import java.util.ArrayList;

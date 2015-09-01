@@ -1,8 +1,5 @@
 package com.illucit.instatrie.trie;
 
-import static com.illucit.instatrie.util.CollectionUtils.EMPTY_CHAR_ARRAY;
-import static com.illucit.instatrie.util.CollectionUtils.subarray;
-
 import java.io.Serializable;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -24,6 +21,8 @@ import java.util.function.Function;
 public class Trie<T extends Serializable> implements PrefixDictionary<T> {
 
 	private static final long serialVersionUID = 2207742126800619167L;
+
+	private static final char[] EMPTY_CHAR_ARRAY = new char[0];
 
 	/**
 	 * Root node of the tree.
@@ -517,6 +516,30 @@ public class Trie<T extends Serializable> implements PrefixDictionary<T> {
 	@Override
 	public String toString() {
 		return this.root.toString();
+	}
+
+	/**
+	 * Create subarray of char array.
+	 * 
+	 * @param array
+	 *            input array
+	 * @param startIndex
+	 *            start index (inclusive)
+	 * @param endIndex
+	 *            end index (exclusive)
+	 * @return sub array of size (end index - start index)
+	 */
+	private static char[] subarray(char[] array, int startIndex, int endIndex) {
+		startIndex = Math.max(startIndex, 0);
+		endIndex = Math.min(endIndex, array.length);
+		int newSize = endIndex - startIndex;
+		if (newSize <= 0) {
+			return EMPTY_CHAR_ARRAY;
+		}
+
+		char[] subarray = new char[newSize];
+		System.arraycopy(array, startIndex, subarray, 0, newSize);
+		return subarray;
 	}
 
 }
