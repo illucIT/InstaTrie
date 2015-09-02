@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import com.illucit.instatrie.splitter.HighlightedString;
+import com.illucit.instatrie.highlight.HighlightedString;
 
 public interface PrefixIndex<T extends Serializable> extends Serializable {
 
@@ -133,7 +133,7 @@ public interface PrefixIndex<T extends Serializable> extends Serializable {
 	 * with the current object, so that both objects share a state and each trie
 	 * operation on one of the objects also affects the other object in the same
 	 * way. The original prefix index won't be modified by this operation. If
-	 * the current instance already contins a filter, the new predicate will be
+	 * the current instance already contains a filter, the new predicate will be
 	 * added as additional filter predicate.
 	 * 
 	 * @param filterFunction

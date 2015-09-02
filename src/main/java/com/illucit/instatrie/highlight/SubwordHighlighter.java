@@ -1,4 +1,4 @@
-package com.illucit.instatrie.splitter;
+package com.illucit.instatrie.highlight;
 
 import java.util.Set;
 

@@ -1,4 +1,4 @@
-package com.illucit.instatrie.splitter;
+package com.illucit.instatrie.highlight;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -204,7 +204,7 @@ public class HighlightedString implements Serializable {
 			// segments
 			return -Integer.compare(length, o.length);
 		}
-		
+
 		@Override
 		public String toString() {
 			return "[" + getStart() + ":" + getLength() + "]";

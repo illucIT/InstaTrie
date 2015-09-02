@@ -9,9 +9,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.illucit.instatrie.highlight.HighlightedString.HighlightSegment;
 import com.illucit.instatrie.index.PrefixIndex;
 import com.illucit.instatrie.index.TriePrefixIndex;
-import com.illucit.instatrie.splitter.HighlightedString.HighlightSegment;
 import com.illucit.instatrie.splitter.StringWordSplitter;
 
 /**

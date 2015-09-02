@@ -12,7 +12,9 @@ import java.util.regex.Pattern;
 
 import org.apache.lucene.analysis.miscellaneous.ASCIIFoldingFilter;
 
-import com.illucit.instatrie.splitter.HighlightedString.Highlight;
+import com.illucit.instatrie.highlight.HighlightedString;
+import com.illucit.instatrie.highlight.SubwordHighlighter;
+import com.illucit.instatrie.highlight.HighlightedString.Highlight;
 import com.illucit.util.ASCIIUtils;
 
 /**

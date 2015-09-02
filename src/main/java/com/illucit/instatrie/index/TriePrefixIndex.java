@@ -22,10 +22,10 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import com.illucit.instatrie.splitter.HighlightedString;
+import com.illucit.instatrie.highlight.HighlightedString;
+import com.illucit.instatrie.highlight.SubwordHighlighter;
 import com.illucit.instatrie.splitter.StringWordSplitter;
 import com.illucit.instatrie.splitter.StringWordSplitter.IdentityStringWordSplitter;
-import com.illucit.instatrie.splitter.SubwordHighlighter;
 import com.illucit.instatrie.splitter.WordSplitter;
 import com.illucit.instatrie.trie.Trie;
 
