@@ -1,6 +1,6 @@
 # InstaTrie
 
-Performant Prefix Index and Searchword Highlighter, implemented with Trie data structures.
+High-performance prefix index and search word highlighter, implemented with trie data structures.
 
 ## Key Features
 
@@ -17,24 +17,15 @@ Performant Prefix Index and Searchword Highlighter, implemented with Trie data s
 
 ## Setup
 
-To use `InstaTrie` in your Maven project, you will need to add the public illucIT Maven reporitory to your Maven `pom.xml`. Then you can simply add `InstaTrie` as dependency:
+To use `InstaTrie` in your Maven project, you can simply add `instatrie` as dependency:
 
     <dependency>
         <groupId>com.illucit</groupId>
-        <artifactId>InstaTrie</artifactId>
-        <version>1.5</version>
+        <artifactId>instatrie</artifactId>
+        <version>1.5.1</version>
     </dependency>
-    
-    <repositories>
-        <!-- illucIT Company Repository -->
-        <repository>
-            <id>illucit</id>
-            <name>illucIT Public Maven Repository</name>
-            <url>http://repository.illucit.com</url>
-        </repository>
-    </repositories>
 
-The only dependency of `InstaTrie` is the library `lucene-utils` for String normalization, which has no further dependencies itself.
+The only dependency of `instatrie` is the library `lucene-utils` for String normalization, which has no further dependencies itself.
 
 ## Trie Data Structure
 
@@ -233,7 +224,7 @@ highlighted and non-highligted segmenty, you can use for rendering.
 
 ## Future Planning
 
-There are some featur ideas which didn't make it into the current implementation:
+There are some feature ideas which didn't make it into the current implementation:
 
 * Currently only the whole index can be refreshed. If you want to add a model to the index, you have to combine the current list of models with the new model in a temporary list,
 and create a new index from the whole new list. 

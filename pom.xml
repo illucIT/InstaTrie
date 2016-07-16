@@ -7,27 +7,26 @@
 	<parent>
 		<groupId>com.illucit</groupId>
 		<artifactId>illucit-parent</artifactId>
-		<version>2</version>
+		<version>3</version>
 	</parent>
 
-	<artifactId>InstaTrie</artifactId>
-	<version>1.5</version>
+	<artifactId>instatrie</artifactId>
+	<version>1.5.1</version>
 	<packaging>jar</packaging>
 
 	<name>InstaTrie</name>
-	<description>Trie Data Structure for performant String search and filtering</description>
-	<url>http://www.illucit.com</url>
+	<description>Trie Data Structure for high-performance String search and filtering</description>
+	<url>https://www.illucit.com</url>
 
 	<organization>
 		<name>illucIT Software GmbH</name>
-		<url>http://www.illucit.com</url>
+		<url>https://www.illucit.com</url>
 	</organization>
 
 	<licenses>
 		<license>
-			<name>Apache License, Version 2.0</name>
+			<name>The Apache License, Version 2.0</name>
 			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-			<distribution>repo</distribution>
 		</license>
 	</licenses>
 
@@ -39,10 +38,12 @@
 
 	<developers>
 		<developer>
-			<id>csimon</id>
+			<id>metaxmx</id>
 			<name>Christian Simon</name>
 			<email>simon@illucit.com</email>
 			<url>https://github.com/metaxmx</url>
+			<organization>illucIT Software GmbH</organization>
+			<organizationUrl>https://www.illucit.com</organizationUrl>
 		</developer>
 	</developers>
 
@@ -56,7 +57,7 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 
 		<!-- Define the version of lucene utils -->
-		<version.luceneutils>1.0</version.luceneutils>
+		<version.luceneutils>1.0.1</version.luceneutils>
 
 		<!-- Junit -->
 		<version.junit>4.11</version.junit>
@@ -77,7 +78,6 @@
 	</dependencies>
 
 	<build>
-		<finalName>${project.artifactId}</finalName>
 		<plugins>
 			<plugin>
 				<artifactId>maven-source-plugin</artifactId>
@@ -87,19 +87,5 @@
 			</plugin>
 		</plugins>
 	</build>
-
-	<repositories>
-		<!-- illucIT Public Repository -->
-		<repository>
-			<id>illucit</id>
-			<name>illucIT Company Maven Repository</name>
-			<url>http://repository.illucit.com</url>
-			<releases>
-				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
-				<checksumPolicy>warn</checksumPolicy>
-			</releases>
-		</repository>
-	</repositories>
 
 </project>
