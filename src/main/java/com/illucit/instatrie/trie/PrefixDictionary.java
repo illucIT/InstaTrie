@@ -20,7 +20,7 @@ public interface PrefixDictionary<T extends Serializable> extends Serializable {
 	 * @param word
 	 *            word to be inserted
 	 */
-	public default void insert(String word) {
+	default void insert(String word) {
 		insert(word.toCharArray(), 0, word.length(), null);
 	}
 
@@ -30,7 +30,7 @@ public interface PrefixDictionary<T extends Serializable> extends Serializable {
 	 * @param word
 	 *            word to be inserted
 	 */
-	public default void insert(char[] word) {
+	default void insert(char[] word) {
 		insert(word, 0, word.length, null);
 	}
 
@@ -42,7 +42,7 @@ public interface PrefixDictionary<T extends Serializable> extends Serializable {
 	 * @param data
 	 *            payload data
 	 */
-	public default void insert(String word, T data) {
+	default void insert(String word, T data) {
 		insert(word.toCharArray(), 0, word.length(), data);
 	}
 
@@ -54,7 +54,7 @@ public interface PrefixDictionary<T extends Serializable> extends Serializable {
 	 * @param data
 	 *            payload data
 	 */
-	public default void insert(char[] word, T data) {
+	default void insert(char[] word, T data) {
 		insert(word, 0, word.length, data);
 	}
 
@@ -68,7 +68,7 @@ public interface PrefixDictionary<T extends Serializable> extends Serializable {
 	 * @param endIndex
 	 *            index to end the substring at (exclusive)
 	 */
-	public default void insert(String word, int startIndex, int endIndex) {
+	default void insert(String word, int startIndex, int endIndex) {
 		insert(word.toCharArray(), startIndex, endIndex, null);
 	}
 
@@ -82,7 +82,7 @@ public interface PrefixDictionary<T extends Serializable> extends Serializable {
 	 * @param endIndex
 	 *            index to end the substring at (exclusive)
 	 */
-	public default void insert(char[] word, int startIndex, int endIndex) {
+	default void insert(char[] word, int startIndex, int endIndex) {
 		insert(word, startIndex, endIndex, null);
 	}
 
@@ -98,7 +98,7 @@ public interface PrefixDictionary<T extends Serializable> extends Serializable {
 	 * @param data
 	 *            payload data
 	 */
-	public default void insert(String word, int startIndex, int endIndex, T data) {
+	default void insert(String word, int startIndex, int endIndex, T data) {
 		insert(word.toCharArray(), startIndex, endIndex, data);
 	}
 
@@ -114,12 +114,12 @@ public interface PrefixDictionary<T extends Serializable> extends Serializable {
 	 * @param data
 	 *            payload data
 	 */
-	public void insert(char[] word, int startIndex, int endIndex, T data);
+	void insert(char[] word, int startIndex, int endIndex, T data);
 
 	/**
 	 * Clear all contained words and playload data.
 	 */
-	public void clear();
+	void clear();
 
 	/**
 	 * Check if a word is either included completely or as prefix in the trie.
@@ -129,7 +129,7 @@ public interface PrefixDictionary<T extends Serializable> extends Serializable {
 	 * @return true if the word is included either completely or as prefix of
 	 *         another word
 	 */
-	public default boolean containsPrefix(String word) {
+	default boolean containsPrefix(String word) {
 		return containsPrefix(word.toCharArray());
 	}
 
@@ -141,7 +141,7 @@ public interface PrefixDictionary<T extends Serializable> extends Serializable {
 	 * @return true if the word is included either completely or as prefix of
 	 *         another word
 	 */
-	public boolean containsPrefix(char[] word);
+	boolean containsPrefix(char[] word);
 
 	/**
 	 * Check if a word is included exactly in the trie.
@@ -150,7 +150,7 @@ public interface PrefixDictionary<T extends Serializable> extends Serializable {
 	 *            word to search for
 	 * @return true if the word is included in the trie
 	 */
-	public default boolean contains(String word) {
+	default boolean contains(String word) {
 		return contains(word.toCharArray());
 	}
 
@@ -161,7 +161,7 @@ public interface PrefixDictionary<T extends Serializable> extends Serializable {
 	 *            word to search for
 	 * @return true if the word is included in the trie
 	 */
-	public boolean contains(char[] word);
+	boolean contains(char[] word);
 
 	/**
 	 * Delete the data associated with the given word. If the word is not
@@ -170,7 +170,7 @@ public interface PrefixDictionary<T extends Serializable> extends Serializable {
 	 * @param word
 	 *            word to search for
 	 */
-	public default void delete(String word) {
+	default void delete(String word) {
 		delete(word.toCharArray());
 	}
 
@@ -181,7 +181,7 @@ public interface PrefixDictionary<T extends Serializable> extends Serializable {
 	 * @param word
 	 *            word to search for
 	 */
-	public void delete(char[] word);
+	void delete(char[] word);
 
 	/**
 	 * Get data associated with the word in the trie, or null if the word was
@@ -191,7 +191,7 @@ public interface PrefixDictionary<T extends Serializable> extends Serializable {
 	 *            word to search
 	 * @return Daten am gefundenen Knoten order null
 	 */
-	public default T getData(String word) {
+	default T getData(String word) {
 		return getData(word.toCharArray());
 	}
 
@@ -203,7 +203,7 @@ public interface PrefixDictionary<T extends Serializable> extends Serializable {
 	 *            word to search
 	 * @return Daten am gefundenen Knoten order null
 	 */
-	public T getData(char[] word);
+	T getData(char[] word);
 
 	/**
 	 * Insert or update data in the trie. If the word is already included in the
@@ -218,7 +218,7 @@ public interface PrefixDictionary<T extends Serializable> extends Serializable {
 	 *            function that returns the inserted value (if input data is
 	 *            null) or returns the updates value (if input data is present)
 	 */
-	public default void updateOrInsertData(String word, Function<T, T> updateFunction) {
+	default void updateOrInsertData(String word, Function<T, T> updateFunction) {
 		updateOrInsertData(word.toCharArray(), updateFunction);
 	}
 
@@ -235,12 +235,12 @@ public interface PrefixDictionary<T extends Serializable> extends Serializable {
 	 *            function that returns the inserted value (if input data is
 	 *            null) or returns the updates value (if input data is present)
 	 */
-	public void updateOrInsertData(char[] word, Function<T, T> updateFunction);
+	void updateOrInsertData(char[] word, Function<T, T> updateFunction);
 
 	/**
 	 * Get depth of the trie.
 	 * 
 	 * @return depth of trie
 	 */
-	public int getDepth();
+	int getDepth();
 }

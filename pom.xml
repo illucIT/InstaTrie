@@ -11,7 +11,7 @@
 	</parent>
 
 	<artifactId>instatrie</artifactId>
-	<version>1.6.0</version>
+	<version>2.0.0</version>
 	<packaging>jar</packaging>
 
 	<name>InstaTrie</name>
@@ -53,11 +53,11 @@
 		<scm.url>https://github.com/illucIT/InstaTrie</scm.url>
 
 		<!-- Target Java Compatibility -->
-		<maven.compiler.target>1.8</maven.compiler.target>
-		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.9</maven.compiler.target>
+		<maven.compiler.source>1.9</maven.compiler.source>
 
 		<!-- Define the version of lucene utils -->
-		<version.luceneutils>1.0.1</version.luceneutils>
+		<version.luceneutils>1.1.2</version.luceneutils>
 
 		<!-- Junit -->
 		<version.junit>4.11</version.junit>
@@ -75,15 +75,62 @@
 			<version>${version.junit}</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>26.0-jre</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
 			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.0</version>
+				<executions>
+					<execution>
+						<id>default-compile</id>
+						<configuration>
+							<!-- compile everything to ensure module-info contains right entries -->
+							<release>9</release>
+						</configuration>
+					</execution>
+					<execution>
+						<id>base-compile</id>
+						<goals>
+							<goal>compile</goal>
+						</goals>
+						<!-- recompile everything for target VM except the module-info.java -->
+						<configuration>
+							<excludes>
+								<exclude>module-info.java</exclude>
+							</excludes>
+						</configuration>
+					</execution>
+				</executions>
+				<!-- defaults for compile and testCompile -->
+				<configuration>
+					<!-- Only required when JAVA_HOME isn't at least Java 9 and when haven't configured the maven-toolchains-plugin -->
+					<jdkToolchain>
+						<version>9</version>
+					</jdkToolchain>
+					<release>8</release>
+				</configuration>
+			</plugin>
+			<plugin>
 				<artifactId>maven-source-plugin</artifactId>
+				<version>3.0.1</version>
 			</plugin>
 			<plugin>
 				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>3.0.1</version>
+				<configuration>
+					<jdkToolchain>
+						<version>9</version>
+					</jdkToolchain>
+					<additionalOptions>-html5</additionalOptions>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

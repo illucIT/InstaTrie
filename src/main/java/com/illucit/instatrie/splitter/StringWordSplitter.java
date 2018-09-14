@@ -10,12 +10,10 @@ import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.lucene.analysis.miscellaneous.ASCIIFoldingFilter;
-
 import com.illucit.instatrie.highlight.HighlightedString;
 import com.illucit.instatrie.highlight.SubwordHighlighter;
 import com.illucit.instatrie.highlight.HighlightedString.Highlight;
-import com.illucit.util.ASCIIUtils;
+import static com.illucit.util.ASCIIUtils.foldToASCII;
 
 /**
  * Implementation of a {@link WordSplitter} which uses a regular expression to
@@ -87,7 +85,7 @@ public class StringWordSplitter<T> implements WordSplitter<T>, SubwordHighlighte
 		}
 		indexableData = indexableData.toLowerCase();
 		if (normalizeUnicode) {
-			indexableData = ASCIIUtils.foldToASCII(indexableData);
+			indexableData = foldToASCII(indexableData);
 		}
 
 		Matcher subwordMatcher = subwordPattern.matcher(indexableData);
@@ -136,7 +134,7 @@ public class StringWordSplitter<T> implements WordSplitter<T>, SubwordHighlighte
 		String valueTransformed;
 		int[] posMap = null;
 		if (normalizeUnicode || html) {
-			valueTransformed = ASCIIUtils.foldToASCII(valueLowerCase);
+			valueTransformed = foldToASCII(valueLowerCase);
 			if (valueTransformed.length() != value.length()) {
 				lengthChanged = true;
 			}
@@ -252,7 +250,7 @@ public class StringWordSplitter<T> implements WordSplitter<T>, SubwordHighlighte
 				inputPos += htmlLen - 1;
 				continue;
 			}
-			int nextOutputPos = ASCIIFoldingFilter.foldToASCII(input, inputPos, output, outputPos, 1);
+			int nextOutputPos = foldToASCII(input, inputPos, output, outputPos, 1);
 			for (int curOutputPos = outputPos + 1; curOutputPos <= nextOutputPos; curOutputPos++) {
 				posTransitions[curOutputPos] = nextInputPos;
 			}

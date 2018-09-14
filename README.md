@@ -1,5 +1,7 @@
 # InstaTrie
 
+[![Maven Central](https://img.shields.io/maven-central/v/com.illucit/instatrie.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.illucit%22%20AND%20a:%22instatrie%22)
+
 High-performance prefix index and search word highlighter, implemented with trie data structures.
 
 ## Key Features
@@ -13,6 +15,7 @@ High-performance prefix index and search word highlighter, implemented with trie
 * Ability to create proxies for the data structure with additional filters
 * Compatible to Java List API
 * Support for Java8 Streams API
+* Support for Java9+ Jigsaw module system
 * No further dependencies (except for the ASCII-normalization utility)
 
 ## Setup
@@ -22,7 +25,7 @@ To use `InstaTrie` in your Maven project, you can simply add `instatrie` as depe
     <dependency>
         <groupId>com.illucit</groupId>
         <artifactId>instatrie</artifactId>
-        <version>1.6.0/version>
+        <version>2.0.0/version>
     </dependency>
 
 The only dependency of `instatrie` is the library `lucene-utils` for String normalization, which has no further dependencies itself.
@@ -83,6 +86,16 @@ method with a new list of models, which will overwrite the previous index and bu
     List<Person> personList = ...
     index.createIndex(personList);
 
+### PrefixSearch
+
+The interface `com.illucit.instatrie.index.PrefixSearc<T>` describes the basic operations to query the search index for data.
+The underlying implementation provides the queried data as Java8 streams, but there are also return function as Lists.
+
+In order to use functional composition of the search data, the `PrefixSearch` interface has `filter` and `map` methods,
+which return a dependent `PrefixSearch` instance coupled to the index of the original `PrefixSearch` but applying the
+given mapping- or filter-function to each results.
+
+
 #### Querying
 
 The "Prefix Index" collection provides two basic query operations: `search` and `searchExact`. While the operation `search` will retrieve all models which
@@ -110,10 +123,10 @@ Given the `Person` model mentioned above, the model has the index terms `"john"`
 
 #### List Interface
 
-The `PrefixIndex` interface does not directly extend a class from the Java Collection API. It provides, however, a method `decorateAsList`
-which will return a proxy object which implements `java.util.List<T>` and is still connected to the original `PrefixIndex` instance.
+The `PrefixSearch` interface does not directly extend a class from the Java Collection API. It provides, however, a method `decorateAsList`
+which will return a proxy object which implements `java.util.List<T>` and is still connected to the original `PrefixSearch` instance.
 All write-operations of the `List`-proxy will result in `UnsupportedOperationException`, and all read-operations will be delegated to the
-internal list of models contained in the current index of the `PrefixIndex`.
+internal list of models contained in the current index of the `PrefixSearch`.
 
 The returned proxy is permanently connected to the original `TriePrefixIndex` instance, so when you rebuild the index on one of the instances,
 it will also change the index of the other instance. All Trie query operations on both instances will return exactly the same result.
@@ -131,7 +144,7 @@ If multiple Threads share an instance of `TriePrefixIndex` and one thread refres
 
 #### Java8 Features
 
-In Java8 it is possible to use "Lambda Expressions" to provide implementation sof interfaces with only 1 unimplemented method (like `java.util.Function`).
+In Java8 it is possible to use "Lambda Expressions" to provide implementations of interfaces with only 1 unimplemented method (like `java.util.Function`).
 Instead of providing a `WordSplitter` object when creating a `TriePrefixIndex`, you can also directly pass a lambda expression for a `StringWordSplitter` in the constructor:
 
      TriePrefixIndex<Person> index = new TriePrefixIndex<>(p -> p.getFirstName() + " " + p.getLastName());
@@ -139,22 +152,6 @@ Instead of providing a `WordSplitter` object when creating a `TriePrefixIndex`, 
 The `PrefixIndex` also provides a method `searchStream` which behaves exactly like the `search` method, but instead of returning a `List` of models, it will return
 a Java8 `java.util.stream.Stream<T>` containing the models.
 
-#### Filtering
-
-In some cases it might be helpful to get a "view" for an existing prefix index, which only returns a subset of the indexed models. You could have e.g. a database of articles
-from multiple books and want to have a prefix index containing all articles, and then one prefix index for each book containing only the articles from that book.
-
-One simple solution would be to create multiple indexes, but that will consume twice the memory of the single, full index. Another solution might be to
-always append Java8 filters on each search result from the big index, depending on the use case.
-
-However, the `PrefixIndex` interface provides a method itself to help you with this use case. The method `getFilteredView(filterFunction)` will return
-a proxy to the original prefix index, but where all search results are automatically filtered by the given filter function paramete (which is a Java8 predicate
-and can be written as lambda expression). The two instances are permanently connected and the refreshing of the index on one instance will also change the index of the other instance.
-Because both instances share the same state, the memory usage is exactly the same as with the original index (except for the additional proxy object which contains no data).
-You can even create a new filter proxy with another filter predicate from the first filter proxy, which will yield a new filter proxy with a combined filter predicate (both must be true).
-
-This feature can be combined with the "list proxy" functionality described above; when you create a filter proxxy< from a list proxy, you will get a proxy of the original
-prefix index which has a filtered view as well as list capabilities.
 
 ## Highlighting
 
