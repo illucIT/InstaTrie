@@ -129,24 +129,6 @@ public class TriePrefixIndex<T extends Serializable> implements PrefixIndex<T>, 
 		this.indexData = new AtomicReference<>(new TriePrefixIndexData<>());
 	}
 
-	/**
-	 * Create view on other trie prefix index. The data structures are
-	 * referenced, so the new instance is a view on the original prefix index
-	 * (so changes are propagated in both directions). This can be used for
-	 * decorating.
-	 * 
-	 * @param other
-	 *            other prefix index
-	 */
-	private TriePrefixIndex(TriePrefixIndex<T> other) {
-		this.dataWordSplitter = other.dataWordSplitter;
-		this.searchWordSplitter = other.searchWordSplitter;
-		this.highlighter = other.highlighter;
-
-		// Bind reference to index data to index data of other prefix index
-		this.indexData = other.indexData;
-	}
-
 	/*
 	 * PrefixIndex API methods
 	 */
@@ -207,6 +189,10 @@ public class TriePrefixIndex<T extends Serializable> implements PrefixIndex<T>, 
 	public Stream<T> searchStream(String query) {
 		TriePrefixIndexData<T> data = indexData.get();
 
+		if (query == null) {
+			// No filtering enabled
+			return data.getModelData().stream();
+		}
 		Set<String> queryPrefixes = searchWordSplitter.split(query);
 		if (queryPrefixes == null || queryPrefixes.isEmpty()) {
 			// No filtering enabled
@@ -238,28 +224,22 @@ public class TriePrefixIndex<T extends Serializable> implements PrefixIndex<T>, 
 		// @formatter:off
 		return getArrayListStream(data.getModelData())
 				.filter(e -> filteredIndices.contains(e.getIndex()))
-				.map(e -> e.getData());
+				.map(ArrayListEntry::getData);
 		// @formatter:on
 	}
 
 	@Override
-	public List<T> search(String query) {
-		return unmodifiableList(searchStream(query).collect(toList()));
-	}
-
-	@Override
-	public List<T> search(String query, long maxSize) {
-		return unmodifiableList(searchStream(query).limit(maxSize).collect(toList()));
-	}
-
-	@Override
-	public List<T> searchExact(String query) {
+	public Stream<T> searchExactStream(String query) {
 		TriePrefixIndexData<T> data = indexData.get();
 
+		if (query == null) {
+			// No filtering enabled
+			return data.getModelData().stream();
+		}
 		Set<String> queryWords = searchWordSplitter.split(query);
 		if (queryWords == null || queryWords.isEmpty()) {
 			// No filtering enabled
-			return unmodifiableList(data.getModelData());
+			return data.getModelData().stream();
 		}
 
 		Set<Integer> filteredIndices = new HashSet<>();
@@ -279,15 +259,8 @@ public class TriePrefixIndex<T extends Serializable> implements PrefixIndex<T>, 
 		// @formatter:off
 		return getArrayListStream(data.getModelData())
 				.filter(e -> filteredIndices.contains(e.getIndex()))
-				.map(e -> e.getData())
-				.collect(toList());
+				.map(ArrayListEntry::getData);
 		// @formatter:on
-	}
-
-	@Override
-	public List<T> getAll() {
-		TriePrefixIndexData<T> data = indexData.get();
-		return unmodifiableList(data.getModelData());
 	}
 
 	@Override
@@ -300,16 +273,6 @@ public class TriePrefixIndex<T extends Serializable> implements PrefixIndex<T>, 
 	public HighlightedString getHighlightedHtml(String modelValue, String query) {
 		Set<String> queryWords = searchWordSplitter.split(query);
 		return highlightSubwordPrefixesWithHtml(modelValue, queryWords);
-	}
-
-	@Override
-	public PrefixIndexListDecorator<T> decorateAsList() {
-		return new TriePrefixIndexListDecorator<>(this);
-	}
-
-	@Override
-	public TriePrefixIndexFiltered<T> getFilteredView(Predicate<T> filterFunction) {
-		return new TriePrefixIndexFiltered<>(this, filterFunction);
 	}
 
 	/*
@@ -349,12 +312,12 @@ public class TriePrefixIndex<T extends Serializable> implements PrefixIndex<T>, 
 	public String toString() {
 		TriePrefixIndexData<T> data = indexData.get();
 
-		StringBuffer result = new StringBuffer();
+		StringBuilder result = new StringBuilder();
 		for (String word : new TreeSet<>(data.getWordsToModelIndex().keySet())) {
 			result.append(word).append(": ");
 			Set<Integer> filteredIndices = data.getWordsToModelIndex().get(word);
 			result.append(getArrayListStream(data.getModelData()).filter(e -> filteredIndices.contains(e.getIndex()))
-					.map(e -> e.getData()).collect(toList()));
+					.map(ArrayListEntry::getData).collect(toList()));
 			result.append("\n");
 		}
 		result.append(data.getWordsTrie());
@@ -429,7 +392,7 @@ public class TriePrefixIndex<T extends Serializable> implements PrefixIndex<T>, 
 		 * Get multimap where is stored, which words are contained in which
 		 * models.
 		 * 
-		 * @return index as {@link HashMultimap}
+		 * @return index as multi map
 		 */
 		public Map<String, Set<Integer>> getWordsToModelIndex() {
 			return wordsToModelIndex;
@@ -529,189 +492,6 @@ public class TriePrefixIndex<T extends Serializable> implements PrefixIndex<T>, 
 		 */
 		public T getData() {
 			return data;
-		}
-
-	}
-
-	/*
-	 * Index Prefix Modifications (Subclasses with additional functionality)
-	 */
-
-	/**
-	 * Decorator implementation of {@link PrefixIndexListDecorator} for
-	 * {@link TriePrefixIndex}.
-	 * 
-	 * @author Christian Simon
-	 *
-	 * @param <T>
-	 *            model type
-	 */
-	public static class TriePrefixIndexListDecorator<T extends Serializable> extends TriePrefixIndex<T> implements
-			PrefixIndexListDecorator<T> {
-
-		private static final long serialVersionUID = 8735909387455764162L;
-
-		/**
-		 * Decorate undecorated instance.
-		 * 
-		 * @param undecorated
-		 *            trie prefix index instance
-		 */
-		private TriePrefixIndexListDecorator(TriePrefixIndex<T> undecorated) {
-			super(undecorated);
-		}
-
-		@Override
-		public TriePrefixIndexListDecorator<T> decorateAsList() {
-			return this;
-		}
-
-		@Override
-		public TriePrefixIndexListDecoratorFiltered<T> getFilteredView(Predicate<T> filterFunction) {
-			return new TriePrefixIndexListDecoratorFiltered<>(this, filterFunction);
-		}
-	}
-
-	/**
-	 * View on a {@link TriePrefixIndex} where all result lists are filtered by
-	 * a target predicate function. The internal data structures are completely
-	 * entangled with the given dalagate trie prefix index, so the state is
-	 * share across both instances.
-	 * 
-	 * @author Christian Simon
-	 *
-	 * @param <T>
-	 *            model type
-	 */
-	public static class TriePrefixIndexFiltered<T extends Serializable> extends TriePrefixIndex<T> {
-
-		private static final long serialVersionUID = -4540409786854800858L;
-
-		private final Predicate<T> filterFunction;
-
-		/**
-		 * Upgrade from common prefix index.
-		 * 
-		 * @param delegate
-		 *            prefix index delegate
-		 * @param filterFunction
-		 *            filter predicate
-		 */
-		public TriePrefixIndexFiltered(TriePrefixIndex<T> delegate, Predicate<T> filterFunction) {
-			super(delegate);
-			this.filterFunction = filterFunction;
-		}
-
-		/**
-		 * Upgrade from {@link TriePrefixIndexFiltered} with an additional
-		 * filter predicate.
-		 * 
-		 * @param delegate
-		 *            prefix index delegate
-		 * @param additionalFilterFunction
-		 *            additional filter predicate
-		 */
-		public TriePrefixIndexFiltered(TriePrefixIndexFiltered<T> delegate, Predicate<T> additionalFilterFunction) {
-			super(delegate);
-			this.filterFunction = delegate.getFilterFunction().and(additionalFilterFunction);
-		}
-
-		/**
-		 * Get the filter predicate used by this view.
-		 * 
-		 * @return filter method
-		 */
-		public Predicate<T> getFilterFunction() {
-			return filterFunction;
-		}
-
-		@Override
-		public List<T> getAll() {
-			return super.getAll().stream().filter(filterFunction).collect(toList());
-		}
-
-		@Override
-		public Stream<T> searchStream(String query) {
-			return super.searchStream(query).filter(filterFunction);
-		}
-
-		@Override
-		public List<T> searchExact(String query) {
-			return super.searchExact(query).stream().filter(filterFunction).collect(toList());
-		}
-
-		@Override
-		public TriePrefixIndexListDecoratorFiltered<T> decorateAsList() {
-			return new TriePrefixIndexListDecoratorFiltered<>(this);
-		}
-
-		@Override
-		public TriePrefixIndexFiltered<T> getFilteredView(Predicate<T> filterFunction) {
-			return new TriePrefixIndexFiltered<T>(this, filterFunction);
-		}
-
-	}
-
-	/**
-	 * Decorator implementation of {@link PrefixIndexListDecorator} for
-	 * {@link TriePrefixIndexFiltered}.
-	 * 
-	 * @author Christian Simon
-	 *
-	 * @param <T>
-	 *            model type
-	 */
-	public static class TriePrefixIndexListDecoratorFiltered<T extends Serializable> extends TriePrefixIndexFiltered<T>
-			implements PrefixIndexListDecorator<T> {
-
-		private static final long serialVersionUID = -6157245745365047995L;
-
-		/**
-		 * Upgrade from {@link TriePrefixIndexListDecorator} with a filter
-		 * predicate.
-		 * 
-		 * @param delegate
-		 *            prefix index delegate
-		 * @param filterFunction
-		 *            filter predicate
-		 */
-		public TriePrefixIndexListDecoratorFiltered(TriePrefixIndexListDecorator<T> delegate,
-				Predicate<T> filterFunction) {
-			super(delegate, filterFunction);
-		}
-
-		/**
-		 * Upgrade from {@link TriePrefixIndexFiltered} to list decorator.
-		 * 
-		 * @param delegate
-		 *            prefix index delegate
-		 */
-		public TriePrefixIndexListDecoratorFiltered(TriePrefixIndexFiltered<T> delegate) {
-			super(delegate, delegate.getFilterFunction());
-		}
-
-		/**
-		 * Upgrade from {@link TriePrefixIndexListDecoratorFiltered} with an
-		 * additional filter predicate.
-		 * 
-		 * @param delegate
-		 *            prefix index delegate
-		 * @param additionalFilterFunction
-		 *            additional filter predicate
-		 */
-		public TriePrefixIndexListDecoratorFiltered(TriePrefixIndexListDecoratorFiltered<T> delegate,
-				Predicate<T> additionalFilterFunction) {
-			super(delegate, delegate.getFilterFunction().and(additionalFilterFunction));
-		}
-
-		@Override
-		public TriePrefixIndexListDecoratorFiltered<T> decorateAsList() {
-			return this;
-		}
-
-		@Override
-		public TriePrefixIndexListDecoratorFiltered<T> getFilteredView(Predicate<T> filterFunction) {
-			return new TriePrefixIndexListDecoratorFiltered<T>(this, filterFunction);
 		}
 
 	}

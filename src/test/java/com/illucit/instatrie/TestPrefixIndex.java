@@ -28,7 +28,7 @@ public class TestPrefixIndex {
 
 	@Before
 	public void initialize() {
-		index = new TriePrefixIndex<>((TestBean bean) -> bean.getQueryString());
+		index = new TriePrefixIndex<>(TestBean::getQueryString);
 
 		entries.add(new TestBean(1, "Der Herr der Ringe - Die Gefährten", "J. R. R. Tolkien"));
 		entries.add(new TestBean(2, "Der Herr der Ringe - Die Zwei Türme", "J. R. R. Tolkien"));
@@ -239,7 +239,7 @@ public class TestPrefixIndex {
 		}
 
 		public String getQueryString() {
-			StringBuffer buffer = new StringBuffer();
+			StringBuilder buffer = new StringBuilder();
 			buffer.append(getTitle()).append(" ");
 			for (String author : getAuthors()) {
 				buffer.append(author).append(" ");
@@ -249,7 +249,7 @@ public class TestPrefixIndex {
 
 		@Override
 		public String toString() {
-			StringBuffer result = new StringBuffer();
+			StringBuilder result = new StringBuilder();
 			result.append("[").append(getId()).append(": ").append(getTitle());
 			for (String author : getAuthors()) {
 				result.append(" ~ ").append(author);

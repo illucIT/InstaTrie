@@ -22,7 +22,7 @@ To use `InstaTrie` in your Maven project, you can simply add `instatrie` as depe
     <dependency>
         <groupId>com.illucit</groupId>
         <artifactId>instatrie</artifactId>
-        <version>1.5.1</version>
+        <version>1.6.0/version>
     </dependency>
 
 The only dependency of `instatrie` is the library `lucene-utils` for String normalization, which has no further dependencies itself.

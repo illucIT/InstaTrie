@@ -78,6 +78,9 @@ public class StringWordSplitter<T> implements WordSplitter<T>, SubwordHighlighte
 
 	@Override
 	public Set<String> split(T data) {
+		if (data == null) {
+			return null;
+		}
 		String indexableData = resolveIndexString.apply(data);
 		if (indexableData == null) {
 			return null;

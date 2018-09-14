@@ -53,21 +53,21 @@ public class TestIterators {
 		String[] childrenExpectedArray = new String[] { "a", "zzz" };
 		LinkedList<String> childrenExpected = new LinkedList<>(Arrays.asList(childrenExpectedArray));
 		LinkedList<String> childrenResult = new LinkedList<>();
-		root.children().stream().filter(node -> node.hasData()).forEach(node -> childrenResult.add(node.getData()));
+		root.children().stream().filter(TrieNode::hasData).forEach(node -> childrenResult.add(node.getData()));
 		Assert.assertEquals(childrenExpected, childrenResult);
 
 		TrieNode<String> firstChild = root.getFirstSon();
 		String[] brothersExpectedArray = new String[] { "a", "zzz" };
 		LinkedList<String> brothersExpected = new LinkedList<>(Arrays.asList(brothersExpectedArray));
 		LinkedList<String> brothersResult = new LinkedList<>();
-		firstChild.brothers().stream().filter(node -> node.hasData())
+		firstChild.brothers().stream().filter(TrieNode::hasData)
 				.forEach(node -> brothersResult.add(node.getData()));
 		Assert.assertEquals(brothersExpected, brothersResult);
 
 		String[] descendentsExpectedArray = new String[] { "abc", "abcde", "axy", "a", "zzz" };
 		TreeSet<String> descendentsExpected = new TreeSet<>(Arrays.asList(descendentsExpectedArray));
 		TreeSet<String> descendentsResult = new TreeSet<>();
-		root.descendants().stream().filter(node -> node.hasData())
+		root.descendants().stream().filter(TrieNode::hasData)
 				.forEach(node -> descendentsResult.add(node.getData()));
 		Assert.assertEquals(descendentsExpected, descendentsResult);
 	}

@@ -1,9 +1,10 @@
 package com.illucit.instatrie;
 
-import static com.illucit.instatrie.util.ListUtils.newList;
 import static java.util.function.Function.identity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.Assert;
@@ -31,7 +32,7 @@ public class TestHighlighting {
 
 	@Before
 	public void prepare() {
-		index = new TriePrefixIndex<String>(identity());
+		index = new TriePrefixIndex<>(identity());
 		result = null;
 		expected = null;
 	}
@@ -82,7 +83,7 @@ public class TestHighlighting {
 
 		// @formatter:off
 		result = index.getHighlighted("qwertzuiop", "qwer").getSegments();
-		expected = newList(
+		expected = Arrays.asList(
 				new HighlightSegment("qwer", true),
 				new HighlightSegment("tzuiop", false)
 		);
@@ -91,7 +92,7 @@ public class TestHighlighting {
 
 		// @formatter:off
 		result = index.getHighlighted("qwertzuiop", "q").getSegments();
-		expected = newList(
+		expected = Arrays.asList(
 				new HighlightSegment("q", true),
 				new HighlightSegment("wertzuiop", false)
 		);
@@ -100,7 +101,7 @@ public class TestHighlighting {
 
 		// @formatter:off
 		result = index.getHighlighted("qwertzuiop", "qwertzuiop").getSegments();
-		expected = newList(
+		expected = Collections.singletonList(
 				new HighlightSegment("qwertzuiop", true)
 		);
 		// @formatter:on
@@ -108,7 +109,7 @@ public class TestHighlighting {
 
 		// @formatter:off
 		result = index.getHighlighted("qwertzuiop asdfg", "qwer").getSegments();
-		expected = newList(
+		expected = Arrays.asList(
 				new HighlightSegment("qwer", true),
 				new HighlightSegment("tzuiop asdfg", false)
 		);
@@ -117,7 +118,7 @@ public class TestHighlighting {
 
 		// @formatter:off
 		result = index.getHighlighted("qwertzuiop asdfg", "q").getSegments();
-		expected = newList(new HighlightSegment("q", true),
+		expected = Arrays.asList(new HighlightSegment("q", true),
 				new HighlightSegment("wertzuiop asdfg", false)
 		);
 		// @formatter:on
@@ -125,7 +126,7 @@ public class TestHighlighting {
 
 		// @formatter:off
 		result = index.getHighlighted("qwertzuiop asdfg", "qwertzuiop").getSegments();
-		expected = newList(
+		expected = Arrays.asList(
 				new HighlightSegment("qwertzuiop", true),
 				new HighlightSegment(" asdfg", false)
 		);
@@ -134,7 +135,7 @@ public class TestHighlighting {
 
 		// @formatter:off
 		result = index.getHighlighted("vbnm hjkl uiop", "hjk").getSegments();
-		expected = newList(
+		expected = Arrays.asList(
 				new HighlightSegment("vbnm ", false),
 				new HighlightSegment("hjk", true),
 				new HighlightSegment("l uiop", false)
@@ -144,7 +145,7 @@ public class TestHighlighting {
 
 		// @formatter:off
 		result = index.getHighlighted("vbnm hjkl uiop", "jkl").getSegments();
-		expected = newList(
+		expected = Collections.singletonList(
 				new HighlightSegment("vbnm hjkl uiop", false)
 		);
 		// @formatter:on
@@ -157,7 +158,7 @@ public class TestHighlighting {
 
 		// @formatter:off
 		result = index.getHighlighted("Hans-Dieter Meier", "Hans-Dieter Meier").getSegments();
-		expected = newList(
+		expected = Arrays.asList(
 				new HighlightSegment("Hans", true),
 				new HighlightSegment("-", false),
 				new HighlightSegment("Dieter", true),
@@ -169,7 +170,7 @@ public class TestHighlighting {
 
 		// @formatter:off
 		result = index.getHighlighted("Ottos Mops kotzt.", "mo ko").getSegments();
-		expected = newList(
+		expected = Arrays.asList(
 				new HighlightSegment("Ottos ", false),
 				new HighlightSegment("Mo", true),
 				new HighlightSegment("ps ", false),
@@ -181,7 +182,7 @@ public class TestHighlighting {
 
 		// @formatter:off
 		result = index.getHighlighted("Annas Ananas ist nass.", "nas ann").getSegments();
-		expected = newList(
+		expected = Arrays.asList(
 				new HighlightSegment("Ann", true),
 				new HighlightSegment("as Ananas ist ", false),
 				new HighlightSegment("nas", true),
@@ -197,7 +198,7 @@ public class TestHighlighting {
 
 		// @formatter:off
 		result = index.getHighlighted("García Coruña", "garcia cöruná").getSegments();
-		expected = newList(
+		expected = Arrays.asList(
 				new HighlightSegment("García", true),
 				new HighlightSegment(" ", false),
 				new HighlightSegment("Coruña", true)
@@ -207,7 +208,7 @@ public class TestHighlighting {
 
 		// @formatter:off
 		result = index.getHighlighted("Hans Müller-Lüdenscheidt", "mull lude").getSegments();
-		expected = newList(
+		expected = Arrays.asList(
 				new HighlightSegment("Hans ", false),
 				new HighlightSegment("Müll", true),
 				new HighlightSegment("er-", false),
@@ -224,7 +225,7 @@ public class TestHighlighting {
 
 		// @formatter:off
 		result = index.getHighlighted("Der Haß ist krass ohne Maß.", "kraß mass").getSegments();
-		expected = newList(
+		expected = Arrays.asList(
 				new HighlightSegment("Der Haß ist ", false),
 				new HighlightSegment("krass", true),
 				new HighlightSegment(" ohne ", false),
