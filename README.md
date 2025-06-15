@@ -1,6 +1,6 @@
 # InstaTrie
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.illucit/instatrie.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.illucit%22%20AND%20a:%22instatrie%22)
+[![Maven Central](https://img.shields.io/maven-central/v/com.illucit/instatrie.svg?label=Maven%20Central)](https://central.sonatype.com/artifact/com.illucit/instatrie)
 
 High-performance prefix index and search word highlighter, implemented with trie data structures.
 
@@ -25,7 +25,7 @@ To use `InstaTrie` in your Maven project, you can simply add `instatrie` as depe
     <dependency>
         <groupId>com.illucit</groupId>
         <artifactId>instatrie</artifactId>
-        <version>2.0.0/version>
+        <version>2.1.0/version>
     </dependency>
 
 The only dependency of `instatrie` is the library `lucene-utils` for String normalization, which has no further dependencies itself.
@@ -88,7 +88,7 @@ method with a new list of models, which will overwrite the previous index and bu
 
 ### PrefixSearch
 
-The interface `com.illucit.instatrie.index.PrefixSearc<T>` describes the basic operations to query the search index for data.
+The interface `com.illucit.instatrie.index.PrefixSearch<T>` describes the basic operations to query the search index for data.
 The underlying implementation provides the queried data as Java8 streams, but there are also return function as Lists.
 
 In order to use functional composition of the search data, the `PrefixSearch` interface has `filter` and `map` methods,

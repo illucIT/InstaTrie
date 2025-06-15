@@ -7,12 +7,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
 import com.illucit.instatrie.index.PrefixIndex;
 import com.illucit.instatrie.index.TriePrefixIndex;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Test suite for {@link TriePrefixIndex}.
@@ -26,7 +26,7 @@ public class TestPrefixIndex {
 
 	private PrefixIndex<TestBean> index;
 
-	@Before
+	@BeforeEach
 	public void initialize() {
 		index = new TriePrefixIndex<>(TestBean::getQueryString);
 
@@ -43,7 +43,7 @@ public class TestPrefixIndex {
 
 	@Test
 	public void testAllEntries() {
-		Assert.assertEquals(entries, index.getAll());
+		assertEquals(entries, index.getAll());
 	}
 
 	@Test
@@ -53,18 +53,18 @@ public class TestPrefixIndex {
 		// Test empty search string
 
 		resultEmpty = index.search("");
-		Assert.assertEquals(entries, resultEmpty);
+		assertEquals(entries, resultEmpty);
 
 		resultEmpty = index.searchExact("");
-		Assert.assertEquals(entries, resultEmpty);
+		assertEquals(entries, resultEmpty);
 
 		// Test search string without usable characters
 
 		resultEmpty = index.search("!\"§ $%&/() =?+#*");
-		Assert.assertEquals(entries, resultEmpty);
+		assertEquals(entries, resultEmpty);
 
 		resultEmpty = index.searchExact("!\"§ $%&/() =?+#*");
-		Assert.assertEquals(entries, resultEmpty);
+		assertEquals(entries, resultEmpty);
 	}
 
 	@Test
@@ -77,31 +77,31 @@ public class TestPrefixIndex {
 		query = "ringe";
 		expected = getExpectedResult(1, 2, 3);
 		result = index.searchExact(query);
-		Assert.assertEquals(expected, result);
+		assertEquals(expected, result);
 
 		query = "zwei";
 		expected = getExpectedResult(2, 5);
 		result = index.searchExact(query);
-		Assert.assertEquals(expected, result);
+		assertEquals(expected, result);
 
 		// Normaize case
 
 		query = "TOLKIEN";
 		expected = getExpectedResult(1, 2, 3, 4);
 		result = index.searchExact(query);
-		Assert.assertEquals(expected, result);
+		assertEquals(expected, result);
 
 		// Normalize diacritical characters
 
 		query = "Turme";
 		expected = getExpectedResult(2);
 		result = index.searchExact(query);
-		Assert.assertEquals(expected, result);
+		assertEquals(expected, result);
 
 		query = "Undefined";
 		expected = getExpectedResult();
 		result = index.searchExact(query);
-		Assert.assertEquals(expected, result);
+		assertEquals(expected, result);
 
 	}
 
@@ -115,22 +115,22 @@ public class TestPrefixIndex {
 		query = "herr ringe";
 		expected = getExpectedResult(1, 2, 3);
 		result = index.searchExact(query);
-		Assert.assertEquals(expected, result);
+		assertEquals(expected, result);
 
 		query = "Tolkien der";
 		expected = getExpectedResult(1, 2, 3, 4);
 		result = index.searchExact(query);
-		Assert.assertEquals(expected, result);
+		assertEquals(expected, result);
 
 		query = "Zwei SPENCER";
 		expected = getExpectedResult(5);
 		result = index.searchExact(query);
-		Assert.assertEquals(expected, result);
+		assertEquals(expected, result);
 
 		query = "Hobbit asdf";
 		expected = getExpectedResult();
 		result = index.searchExact(query);
-		Assert.assertEquals(expected, result);
+		assertEquals(expected, result);
 
 	}
 
@@ -144,27 +144,27 @@ public class TestPrefixIndex {
 		query = "bud";
 		expected = getExpectedResult(5, 6, 7);
 		result = index.search(query);
-		Assert.assertEquals(expected, result);
+		assertEquals(expected, result);
 
 		query = "d";
 		expected = getExpectedResult(1, 2, 3, 4);
 		result = index.search(query);
-		Assert.assertEquals(expected, result);
+		assertEquals(expected, result);
 
 		query = "h";
 		expected = getExpectedResult(1, 2, 3, 4, 5, 6, 7);
 		result = index.search(query);
-		Assert.assertEquals(expected, result);
+		assertEquals(expected, result);
 
 		query = "GEFAHR";
 		expected = getExpectedResult(1);
 		result = index.search(query);
-		Assert.assertEquals(expected, result);
+		assertEquals(expected, result);
 
 		query = "he";
 		expected = getExpectedResult(1, 2, 3, 7);
 		result = index.search(query);
-		Assert.assertEquals(expected, result);
+		assertEquals(expected, result);
 
 	}
 
@@ -178,17 +178,17 @@ public class TestPrefixIndex {
 		query = "bud ter";
 		expected = getExpectedResult(5, 6);
 		result = index.search(query);
-		Assert.assertEquals(expected, result);
+		assertEquals(expected, result);
 
 		query = "ring j";
 		expected = getExpectedResult(1, 2, 3);
 		result = index.search(query);
-		Assert.assertEquals(expected, result);
+		assertEquals(expected, result);
 		
 		query = "hobbit asdf";
 		expected = getExpectedResult();
 		result = index.search(query);
-		Assert.assertEquals(expected, result);
+		assertEquals(expected, result);
 
 	}
 

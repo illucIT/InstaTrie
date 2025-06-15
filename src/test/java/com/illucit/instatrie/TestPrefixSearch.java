@@ -1,16 +1,15 @@
 package com.illucit.instatrie;
 
-import com.google.common.collect.ImmutableList;
 import com.illucit.instatrie.index.PrefixIndex;
 import com.illucit.instatrie.index.PrefixSearch;
 import com.illucit.instatrie.index.TriePrefixIndex;
 import com.illucit.instatrie.splitter.StringWordSplitter;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestPrefixSearch {
 
@@ -28,14 +27,14 @@ public class TestPrefixSearch {
         models.add("rum");
         index.createIndex(models);
 
-        assertEquals(ImmutableList.of("red wine", "white wine", "rose wine"), index.search("wi"));
-        assertEquals(ImmutableList.of("white wine", "rose wine"), filteredSearch.search("wi"));
+        assertEquals(List.of("red wine", "white wine", "rose wine"), index.search("wi"));
+        assertEquals(List.of("white wine", "rose wine"), filteredSearch.search("wi"));
 
-        assertEquals(ImmutableList.of("red wine", "rose wine"), index.search("r w"));
-        assertEquals(ImmutableList.of("rose wine"), filteredSearch.search("r w"));
+        assertEquals(List.of("red wine", "rose wine"), index.search("r w"));
+        assertEquals(List.of("rose wine"), filteredSearch.search("r w"));
 
-        assertEquals(ImmutableList.of("red wine", "rose wine", "rum"), index.search("r"));
-        assertEquals(ImmutableList.of("rum"), filteredSearch2.search("r"));
+        assertEquals(List.of("red wine", "rose wine", "rum"), index.search("r"));
+        assertEquals(List.of("rum"), filteredSearch2.search("r"));
     }
 
     @Test
@@ -52,8 +51,8 @@ public class TestPrefixSearch {
         models.add("rum");
         index.createIndex(models);
 
-        assertEquals(ImmutableList.of("red wine", "rose wine", "rum"), index.search("r"));
-        assertEquals(ImmutableList.of("red wine"), filteredSearchAgain.search("r"));
+        assertEquals(List.of("red wine", "rose wine", "rum"), index.search("r"));
+        assertEquals(List.of("red wine"), filteredSearchAgain.search("r"));
     }
 
     @Test
@@ -69,8 +68,8 @@ public class TestPrefixSearch {
         models.add("rum");
         index.createIndex(models);
 
-        assertEquals(ImmutableList.of("red wine", "rose wine", "rum"), index.search("r"));
-        assertEquals(ImmutableList.of(8, 9, 3), mappedSearch.search("r"));
+        assertEquals(List.of("red wine", "rose wine", "rum"), index.search("r"));
+        assertEquals(List.of(8, 9, 3), mappedSearch.search("r"));
     }
 
     @Test
@@ -87,8 +86,8 @@ public class TestPrefixSearch {
         models.add("rum");
         index.createIndex(models);
 
-        assertEquals(ImmutableList.of("red wine", "rose wine", "rum"), index.search("r"));
-        assertEquals(ImmutableList.of(8, 3), mappedSearch.search("r"));
+        assertEquals(List.of("red wine", "rose wine", "rum"), index.search("r"));
+        assertEquals(List.of(8, 3), mappedSearch.search("r"));
     }
 
 

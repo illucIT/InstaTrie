@@ -1,138 +1,116 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-	<modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>com.illucit</groupId>
-		<artifactId>illucit-parent</artifactId>
-		<version>3</version>
-	</parent>
+    <parent>
+        <groupId>com.illucit</groupId>
+        <artifactId>illucit-parent</artifactId>
+        <version>5</version>
+    </parent>
 
-	<artifactId>instatrie</artifactId>
-	<version>2.0.0</version>
-	<packaging>jar</packaging>
+    <artifactId>instatrie</artifactId>
+    <version>2.1.0</version>
+    <packaging>jar</packaging>
 
-	<name>InstaTrie</name>
-	<description>Trie Data Structure for high-performance String search and filtering</description>
-	<url>https://www.illucit.com</url>
+    <name>InstaTrie</name>
+    <description>Trie Data Structure for high-performance String search and filtering</description>
+    <url>https://www.illucit.com</url>
 
-	<organization>
-		<name>illucIT Software GmbH</name>
-		<url>https://www.illucit.com</url>
-	</organization>
+    <organization>
+        <name>illucIT Software GmbH</name>
+        <url>https://www.illucit.com</url>
+    </organization>
 
-	<licenses>
-		<license>
-			<name>The Apache License, Version 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-		</license>
-	</licenses>
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
 
-	<scm>
-		<connection>scm:git:${scm.connection}</connection>
-		<developerConnection>scm:git:${scm.connection}</developerConnection>
-		<url>${scm.url}</url>
-	</scm>
+    <scm>
+        <connection>scm:git:git://${scm.connection}</connection>
+        <developerConnection>scm:git:ssh://${scm.connection}</developerConnection>
+        <url>${scm.url}</url>
+    </scm>
 
-	<developers>
-		<developer>
-			<id>metaxmx</id>
-			<name>Christian Simon</name>
-			<email>simon@illucit.com</email>
-			<url>https://github.com/metaxmx</url>
-			<organization>illucIT Software GmbH</organization>
-			<organizationUrl>https://www.illucit.com</organizationUrl>
-		</developer>
-	</developers>
+    <developers>
+        <developer>
+            <id>metaxmx</id>
+            <name>Christian Simon</name>
+            <email>simon@illucit.com</email>
+            <url>https://github.com/metaxmx</url>
+            <organization>illucIT Software GmbH</organization>
+            <organizationUrl>https://www.illucit.com</organizationUrl>
+        </developer>
+    </developers>
 
-	<properties>
-		<!-- Release Info -->
-		<scm.connection>git@github.com:illucIT/InstaTrie.git</scm.connection>
-		<scm.url>https://github.com/illucIT/InstaTrie</scm.url>
+    <properties>
+        <!-- Release Info -->
+        <scm.connection>github.com:illucIT/InstaTrie.git</scm.connection>
+        <scm.url>https://github.com/illucIT/InstaTrie/tree/master</scm.url>
 
-		<!-- Target Java Compatibility -->
-		<maven.compiler.target>1.9</maven.compiler.target>
-		<maven.compiler.source>1.9</maven.compiler.source>
+        <!-- Target Java Compatibility -->
+        <maven.compiler.release>21</maven.compiler.release>
 
-		<!-- Define the version of lucene utils -->
-		<version.luceneutils>1.1.2</version.luceneutils>
+        <!-- Define the version of lucene utils -->
+        <version.luceneutils>1.2.0</version.luceneutils>
 
-		<!-- Junit -->
-		<version.junit>4.11</version.junit>
-	</properties>
+        <!-- Junit -->
+        <junit5.jupiter.version>5.13.1</junit5.jupiter.version>
+    </properties>
 
-	<dependencies>
-		<dependency>
-			<groupId>com.illucit</groupId>
-			<artifactId>lucene-utils</artifactId>
-			<version>${version.luceneutils}</version>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>${version.junit}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>26.0-jre</version>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>${junit5.jupiter.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
-	<build>
-		<plugins>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.0</version>
-				<executions>
-					<execution>
-						<id>default-compile</id>
-						<configuration>
-							<!-- compile everything to ensure module-info contains right entries -->
-							<release>9</release>
-						</configuration>
-					</execution>
-					<execution>
-						<id>base-compile</id>
-						<goals>
-							<goal>compile</goal>
-						</goals>
-						<!-- recompile everything for target VM except the module-info.java -->
-						<configuration>
-							<excludes>
-								<exclude>module-info.java</exclude>
-							</excludes>
-						</configuration>
-					</execution>
-				</executions>
-				<!-- defaults for compile and testCompile -->
-				<configuration>
-					<!-- Only required when JAVA_HOME isn't at least Java 9 and when haven't configured the maven-toolchains-plugin -->
-					<jdkToolchain>
-						<version>9</version>
-					</jdkToolchain>
-					<release>8</release>
-				</configuration>
-			</plugin>
-			<plugin>
-				<artifactId>maven-source-plugin</artifactId>
-				<version>3.0.1</version>
-			</plugin>
-			<plugin>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>3.0.1</version>
-				<configuration>
-					<jdkToolchain>
-						<version>9</version>
-					</jdkToolchain>
-					<additionalOptions>-html5</additionalOptions>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+    <dependencies>
+        <dependency>
+            <groupId>com.illucit</groupId>
+            <artifactId>lucene-utils</artifactId>
+            <version>${version.luceneutils}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-launcher</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <release>${maven.compiler.release}</release>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

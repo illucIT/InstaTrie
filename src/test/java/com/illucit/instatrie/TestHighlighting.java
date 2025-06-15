@@ -1,139 +1,137 @@
 package com.illucit.instatrie;
 
-import static java.util.function.Function.identity;
+import com.illucit.instatrie.highlight.HighlightedString.HighlightSegment;
+import com.illucit.instatrie.index.PrefixIndex;
+import com.illucit.instatrie.index.TriePrefixIndex;
+import com.illucit.instatrie.splitter.StringWordSplitter;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
-import com.illucit.instatrie.highlight.HighlightedString.HighlightSegment;
-import com.illucit.instatrie.index.PrefixIndex;
-import com.illucit.instatrie.index.TriePrefixIndex;
-import com.illucit.instatrie.splitter.StringWordSplitter;
+import static java.util.function.Function.identity;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Test class for highlighting machanism of {@link StringWordSplitter} and
+ * Test class for highlighting mechanism of {@link StringWordSplitter} and
  * {@link PrefixIndex}.
- * 
- * @author Christian Simon
  *
+ * @author Christian Simon
  */
 public class TestHighlighting {
 
-	private PrefixIndex<String> index;
+    private PrefixIndex<String> index;
 
-	private List<HighlightSegment> result;
-	private List<HighlightSegment> expected;
+    private List<HighlightSegment> result;
+    private List<HighlightSegment> expected;
 
-	@Before
-	public void prepare() {
-		index = new TriePrefixIndex<>(identity());
-		result = null;
-		expected = null;
-	}
+    @BeforeEach
+    public void prepare() {
+        index = new TriePrefixIndex<>(identity());
+        result = null;
+        expected = null;
+    }
 
-	@Test
-	public void testEmpty() {
+    @Test
+    public void testEmpty() {
 
-		// @formatter:off
+        // @formatter:off
 		result = index.getHighlighted(null, "test").getSegments();
 		expected = new ArrayList<>();
 		// @formatter:on
-		Assert.assertEquals(expected, result);
+        assertEquals(expected, result);
 
-		// @formatter:off
+        // @formatter:off
 		result = index.getHighlighted("", "test").getSegments();
 		expected = new ArrayList<>();
 		// @formatter:on
-		Assert.assertEquals(expected, result);
+        assertEquals(expected, result);
 
-		// @formatter:off
+        // @formatter:off
 		result = index.getHighlighted(null, "").getSegments();
 		expected = new ArrayList<>();
 		// @formatter:on
-		Assert.assertEquals(expected, result);
+        assertEquals(expected, result);
 
-		// @formatter:off
+        // @formatter:off
 		result = index.getHighlighted("", "").getSegments();
 		expected = new ArrayList<>();
 		// @formatter:on
-		Assert.assertEquals(expected, result);
+        assertEquals(expected, result);
 
-		// @formatter:off
+        // @formatter:off
 		result = index.getHighlighted(null, null).getSegments();
 		expected = new ArrayList<>();
 		// @formatter:on
-		Assert.assertEquals(expected, result);
+        assertEquals(expected, result);
 
-		// @formatter:off
+        // @formatter:off
 		result = index.getHighlighted("", null).getSegments();
 		expected = new ArrayList<>();
 		// @formatter:on
-		Assert.assertEquals(expected, result);
+        assertEquals(expected, result);
 
-	}
+    }
 
-	@Test
-	public void testSingleHighlights() {
+    @Test
+    public void testSingleHighlights() {
 
-		// @formatter:off
+        // @formatter:off
 		result = index.getHighlighted("qwertzuiop", "qwer").getSegments();
 		expected = Arrays.asList(
 				new HighlightSegment("qwer", true),
 				new HighlightSegment("tzuiop", false)
 		);
 		// @formatter:on
-		Assert.assertEquals(expected, result);
+        assertEquals(expected, result);
 
-		// @formatter:off
+        // @formatter:off
 		result = index.getHighlighted("qwertzuiop", "q").getSegments();
 		expected = Arrays.asList(
 				new HighlightSegment("q", true),
 				new HighlightSegment("wertzuiop", false)
 		);
 		// @formatter:on
-		Assert.assertEquals(expected, result);
+        assertEquals(expected, result);
 
-		// @formatter:off
+        // @formatter:off
 		result = index.getHighlighted("qwertzuiop", "qwertzuiop").getSegments();
 		expected = Collections.singletonList(
 				new HighlightSegment("qwertzuiop", true)
 		);
 		// @formatter:on
-		Assert.assertEquals(expected, result);
+        assertEquals(expected, result);
 
-		// @formatter:off
+        // @formatter:off
 		result = index.getHighlighted("qwertzuiop asdfg", "qwer").getSegments();
 		expected = Arrays.asList(
 				new HighlightSegment("qwer", true),
 				new HighlightSegment("tzuiop asdfg", false)
 		);
 		// @formatter:on
-		Assert.assertEquals(expected, result);
+        assertEquals(expected, result);
 
-		// @formatter:off
+        // @formatter:off
 		result = index.getHighlighted("qwertzuiop asdfg", "q").getSegments();
 		expected = Arrays.asList(new HighlightSegment("q", true),
 				new HighlightSegment("wertzuiop asdfg", false)
 		);
 		// @formatter:on
-		Assert.assertEquals(expected, result);
+        assertEquals(expected, result);
 
-		// @formatter:off
+        // @formatter:off
 		result = index.getHighlighted("qwertzuiop asdfg", "qwertzuiop").getSegments();
 		expected = Arrays.asList(
 				new HighlightSegment("qwertzuiop", true),
 				new HighlightSegment(" asdfg", false)
 		);
 		// @formatter:on
-		Assert.assertEquals(expected, result);
+        assertEquals(expected, result);
 
-		// @formatter:off
+        // @formatter:off
 		result = index.getHighlighted("vbnm hjkl uiop", "hjk").getSegments();
 		expected = Arrays.asList(
 				new HighlightSegment("vbnm ", false),
@@ -141,22 +139,22 @@ public class TestHighlighting {
 				new HighlightSegment("l uiop", false)
 		);
 		// @formatter:on
-		Assert.assertEquals(expected, result);
+        assertEquals(expected, result);
 
-		// @formatter:off
+        // @formatter:off
 		result = index.getHighlighted("vbnm hjkl uiop", "jkl").getSegments();
 		expected = Collections.singletonList(
 				new HighlightSegment("vbnm hjkl uiop", false)
 		);
 		// @formatter:on
-		Assert.assertEquals(expected, result);
+        assertEquals(expected, result);
 
-	}
+    }
 
-	@Test
-	public void testMultipleHighlights() {
+    @Test
+    public void testMultipleHighlights() {
 
-		// @formatter:off
+        // @formatter:off
 		result = index.getHighlighted("Hans-Dieter Meier", "Hans-Dieter Meier").getSegments();
 		expected = Arrays.asList(
 				new HighlightSegment("Hans", true),
@@ -166,9 +164,9 @@ public class TestHighlighting {
 				new HighlightSegment("Meier", true)
 		);
 		// @formatter:on
-		Assert.assertEquals(expected, result);
+        assertEquals(expected, result);
 
-		// @formatter:off
+        // @formatter:off
 		result = index.getHighlighted("Ottos Mops kotzt.", "mo ko").getSegments();
 		expected = Arrays.asList(
 				new HighlightSegment("Ottos ", false),
@@ -178,9 +176,9 @@ public class TestHighlighting {
 				new HighlightSegment("tzt.", false)
 		);
 		// @formatter:on
-		Assert.assertEquals(expected, result);
+        assertEquals(expected, result);
 
-		// @formatter:off
+        // @formatter:off
 		result = index.getHighlighted("Annas Ananas ist nass.", "nas ann").getSegments();
 		expected = Arrays.asList(
 				new HighlightSegment("Ann", true),
@@ -189,14 +187,14 @@ public class TestHighlighting {
 				new HighlightSegment("s.", false)
 		);
 		// @formatter:on
-		Assert.assertEquals(expected, result);
+        assertEquals(expected, result);
 
-	}
+    }
 
-	@Test
-	public void testAsciiFolding() {
+    @Test
+    public void testAsciiFolding() {
 
-		// @formatter:off
+        // @formatter:off
 		result = index.getHighlighted("García Coruña", "garcia cöruná").getSegments();
 		expected = Arrays.asList(
 				new HighlightSegment("García", true),
@@ -204,9 +202,9 @@ public class TestHighlighting {
 				new HighlightSegment("Coruña", true)
 		);
 		// @formatter:on
-		Assert.assertEquals(expected, result);
+        assertEquals(expected, result);
 
-		// @formatter:off
+        // @formatter:off
 		result = index.getHighlighted("Hans Müller-Lüdenscheidt", "mull lude").getSegments();
 		expected = Arrays.asList(
 				new HighlightSegment("Hans ", false),
@@ -216,14 +214,14 @@ public class TestHighlighting {
 				new HighlightSegment("nscheidt", false)
 		);
 		// @formatter:on
-		Assert.assertEquals(expected, result);
+        assertEquals(expected, result);
 
-	}
+    }
 
-	@Test
-	public void testAsciiFoldingExpansion() {
+    @Test
+    public void testAsciiFoldingExpansion() {
 
-		// @formatter:off
+        // @formatter:off
 		result = index.getHighlighted("Der Haß ist krass ohne Maß.", "kraß mass").getSegments();
 		expected = Arrays.asList(
 				new HighlightSegment("Der Haß ist ", false),
@@ -233,8 +231,8 @@ public class TestHighlighting {
 				new HighlightSegment(".", false)
 		);
 		// @formatter:on
-		Assert.assertEquals(expected, result);
+        assertEquals(expected, result);
 
-	}
+    }
 
 }
